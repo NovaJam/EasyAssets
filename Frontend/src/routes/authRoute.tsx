@@ -1,0 +1,34 @@
+import axios from "axios";
+import { LoginResponse } from "../types/auth";
+import { SignupData } from "../types/auth";
+
+const AUTH_URL = "http://localhost:5000"; // Adjust to the route of the backend
+
+// For Login Route
+export const login = async (
+  email: string,
+  password: string
+): Promise<LoginResponse> => {
+  try {
+    const response = await axios.post<LoginResponse>(`${AUTH_URL}/login`, {
+      email,
+      password,
+    });
+
+    return response.data; // Return the login response data
+  } catch (error) {
+    console.error("Login error:", error);
+    throw error; // Rethrow the error for further handling
+  }
+};
+
+// For Signup Route
+export const signup = async (data: SignupData): Promise<void> => {
+  try {
+    await axios.post(`${AUTH_URL}/signup`, data);
+    console.log("Signup Success");
+  } catch (error) {
+    console.error("Signup error:", error);
+    throw error;
+  }
+};
