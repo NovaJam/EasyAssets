@@ -48,6 +48,70 @@ Built with cutting-edge technologies for reliability and scalability:
 
 ---
 
+## ⚙️ Project Setup  
+
+### Prerequisites  
+
+Make sure you have:  
+- **Node.js v14 or later**  
+- **npm or yarn**  
+
+### Installation  
+
+Clone the repository:  
+```bash
+git clone https://github.com/NovaJam/EasyAssets.git
+cd EasyAssets
+```
+
+Install dependencies:  
+```bash
+npm install
+```
+or  
+```bash
+yarn install
+```
+
+### Environment Variables  
+
+Create `.env` files in both the `server` and `client` directories with the required configurations (e.g., MongoDB URI, JWT secret, etc.).
+
+### Run the Development Server  
+
+For the backend:  
+```bash
+npm run dev
+```
+or  
+```bash
+yarn dev
+```
+
+For the frontend:  
+```bash
+npm start
+```
+or  
+```bash
+yarn start
+```
+
+Visit `http://localhost:3000` in your browser to get started.
+
+## 📦 Deployment  
+
+To build the project for production:  
+```bash
+npm run build
+```
+or  
+```bash
+yarn build
+```
+
+This generates a `build/` folder with optimized static files, ready for deployment.
+
 ## 🌟 Why EasyAssets?  
 - Simplifies tracking of physical assets in complex environments.  
 - Empowers teams with real-time updates and role-based access.  
