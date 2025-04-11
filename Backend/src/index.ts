@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { connectDB } from "./lib/connectDB";
 import { Schema, model } from "mongoose";
 
-import assets from "./api/assets";
+import assets from "./routes/assetsRouter";
 
 dotenv.config();
 
