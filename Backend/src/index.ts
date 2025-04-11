@@ -1,18 +1,24 @@
-import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
+dotenv.config()
+import express, { Request, Response } from 'express';
 import mongoose from 'mongoose'
 import { connectDB } from './lib/connectDB'
-
-dotenv.config()
+import authRoutes from './routes/authRouter';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const port = 5000;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+app.use('/api/auth', authRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.json({ message: 'Welcome to the API' });
 });
+
 
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
