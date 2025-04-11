@@ -39,3 +39,5 @@ const assetSchema = new Schema<IAsset>({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
+
+export const Asset = model<IAsset>("Asset", assetSchema);
