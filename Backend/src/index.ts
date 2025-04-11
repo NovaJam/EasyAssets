@@ -1,18 +1,20 @@
-import express, { Request, Response } from "express";
 import dotenv from "dotenv";
+dotenv.config();
+import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import { connectDB } from "./lib/connectDB";
-import { Schema, model } from "mongoose";
-
+import authRoutes from "./routes/authRouter";
+import cookieParser from "cookie-parser";
 import assets from "./routes/assetsRouter";
-
-dotenv.config();
 
 const app = express();
 const port = 6090;
 
 app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   console.log("Jinchuriki");
