@@ -1,5 +1,7 @@
 import { Document, model, Schema } from "mongoose";
 
+//I am inside the models and it looks great
+
 interface IAsset extends Document {
   assetId: string;
   name: string;
