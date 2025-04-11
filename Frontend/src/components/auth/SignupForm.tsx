@@ -141,6 +141,11 @@ const SignupForm = () => {
           />
         </div>
 
+        <a href="/login">
+          Already have an account?{" "}
+          <span className="underline underline-offset-1">Login</span>
+        </a>
+
         <button
           type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded-md mt-4"
