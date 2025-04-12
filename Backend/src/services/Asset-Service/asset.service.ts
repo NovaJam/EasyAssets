@@ -14,3 +14,7 @@ export const updateAseet = (id: string, updateData: any) => {
 export const deleteAsset = (id: string) => {
   return Asset.findByIdAndDelete(id);
 };
+
+export const getAssetsById = (id: string) => {
+  return Asset.findById(id);
+};

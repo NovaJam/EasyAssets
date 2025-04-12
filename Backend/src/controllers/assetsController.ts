@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   updateAseet,
   deleteAsset,
+  getAssetsById,
 } from "../services/Asset-Service/asset.service";
 
 export const updatedRoute = async (req: Request, res: Response) => {
@@ -57,6 +58,36 @@ export const deleteRoute = async (req: Request, res: Response) => {
     res.json({
       succses: false,
       messsage: "Delete did not work",
+      error: (e as Error).message,
+    });
+    return;
+  }
+};
+
+export const getAssetRoute = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const foundData = await getAssetsById(id);
+
+    if (!foundData) {
+      res.json({
+        succses: false,
+        messsage: "Data not found ",
+      });
+      return;
+    }
+
+    res.json({
+      succses: true,
+      message: "Data found",
+      data: foundData,
+    });
+    return;
+  } catch (e) {
+    console.error(e);
+    res.json({
+      succses: false,
+      messsage: "Couldn't get the data",
       error: (e as Error).message,
     });
     return;
