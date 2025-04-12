@@ -12,7 +12,11 @@ export const updateAseet = (id: string, updateData: any) => {
   });
 };
 export const deleteAsset = (id: string) => {
-  return Asset.findByIdAndDelete(id);
+  return Asset.findByIdAndUpdate(
+    id,
+    { isDeleted: true },
+    { runValidators: true }
+  );
 };
 
 export const getAssetsById = (id: string) => {
@@ -23,8 +27,6 @@ export const createAsset = async (assetData: any) => {
   try {
     return Asset.create({
       ...assetData,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
   } catch (e) {
     throw e;

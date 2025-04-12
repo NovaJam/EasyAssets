@@ -7,29 +7,67 @@ import {
   createAsset,
 } from "../services/Asset-Service/asset.service";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import z from "zod";
+
+const AssetStatus = z.enum(["available", "in_use", "maintenance", "retired"]);
+const AssetStatusEnum = z.enum([
+  "available",
+  "in_use",
+  "maintenance",
+  "retired",
+]);
 
 export const updatedRoute = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const createAssetSchema = z
+    .object({
+      assetId: z.string().min(1).trim(),
+      name: z.string().min(1),
+      category: z.string().min(1),
+      description: z.string().optional(),
+      location: z.string().min(1),
+      status: AssetStatus,
+      assignedTo: z.string().optional(),
+      purchaseDate: z.string().datetime().optional(),
+      warrantyDate: z.string().datetime().optional(),
+      lastMaintained: z.string().datetime().optional(),
+      nextMaintenance: z.string().datetime().optional(),
+      qrCodeUrl: z.string().url().optional(),
+      createdBy: z.string().min(1),
+    })
+    .partial();
+
+  const isparse = createAssetSchema.safeParse(req.body);
+
+  if (!isparse.success) {
+    res.json({
+      success: false,
+      message: "Schema is not validated",
+      error: isparse.error.issues,
+    });
+    return;
+  }
+
   try {
     const upadatedData = req.body;
     const modified = await updateAseet(id, upadatedData);
 
     if (!modified) {
       res.json({
-        succses: false,
+        success: false,
         message: "Asset not found",
       });
       return;
     }
     res.json({
-      succses: true,
+      success: true,
       data: modified,
     });
     return;
   } catch (e) {
     console.error(e);
     res.json({
-      succses: false,
+      success: false,
       message: "failed to do anythying",
       error: (e as Error).message,
     });
@@ -44,14 +82,14 @@ export const deleteRoute = async (req: Request, res: Response) => {
 
     if (!deleted) {
       res.json({
-        succses: false,
+        success: false,
         message: "Asset not found",
       });
       return;
     }
 
     res.json({
-      succses: true,
+      success: true,
       message: "Asset deleted",
       data: deleted,
     });
@@ -59,7 +97,7 @@ export const deleteRoute = async (req: Request, res: Response) => {
   } catch (e) {
     console.error(e);
     res.json({
-      succses: false,
+      success: false,
       messsage: "Delete did not work",
       error: (e as Error).message,
     });
@@ -74,21 +112,21 @@ export const getAssetRoute = async (req: Request, res: Response) => {
 
     if (!foundData) {
       res.json({
-        succses: false,
+        success: false,
         messsage: "Data not found ",
       });
       return;
     }
 
     res.json({
-      succses: true,
+      success: true,
       message: "Data found",
       data: foundData,
     });
     return;
   } catch (e) {
     res.json({
-      succses: false,
+      success: false,
       messsage: "Couldn't get the data",
       error: (e as Error).message,
     });
@@ -136,12 +174,39 @@ export const getAllAssets = async (req: Request, res: Response) => {
   }
 
   res.json({
-    data: data,
+    data: data.filter((el) => !(el.isDeleted === true)),
   });
 };
 
 export const createAssets = async (req: Request, res: Response) => {
   const assetdata = req.body;
+  const creatingSchema = z.object({
+    assetId: z.string().min(1).nonempty().trim(),
+    name: z.string().min(1).nonempty(),
+    category: z.string().min(1).nonempty(),
+    description: z.string().optional(),
+    location: z.string().min(1).nonempty(),
+    status: AssetStatusEnum,
+    assignedTo: z.string().optional(),
+    purchaseDate: z.string().datetime().optional().or(z.date().optional()),
+    warrantyDate: z.string().datetime().optional().or(z.date().optional()),
+    lastMaintained: z.string().datetime().optional().or(z.date().optional()),
+    nextMaintenance: z.string().datetime().optional().or(z.date().optional()),
+    qrCodeUrl: z.string().url().optional(),
+    createdBy: z.string().min(1).nonempty(),
+    isDeleted: z.boolean().default(false).optional(),
+  });
+
+  const isParse = creatingSchema.safeParse(req.body);
+
+  if (!isParse.success) {
+    res.json({
+      success: false,
+      message: "Not correct data",
+      erroe: isParse.error.issues,
+    });
+    return;
+  }
   try {
     const createdAsset = await createAsset(assetdata);
     res.json({

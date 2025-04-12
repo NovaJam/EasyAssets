@@ -6,7 +6,6 @@ import { connectDB } from "./lib/connectDB";
 import authRoutes from "./routes/authRouter";
 import cookieParser from "cookie-parser";
 import assets from "./routes/assetsRouter";
-
 const app = express();
 const port = 6090;
 
