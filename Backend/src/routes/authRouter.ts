@@ -1,4 +1,3 @@
-
 import express from 'express';
 import { signup, login, logout, resetPassword } from "../controllers/authController";
 

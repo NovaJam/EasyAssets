@@ -3,6 +3,7 @@ dotenv.config()
 import express, { Request, Response } from 'express';
 import { connectDB } from './lib/connectDB'
 import authRoutes from './routes/authRouter';
+import supportRoutes from './routes/supportRouter';
 import cookieParser from 'cookie-parser';
 import { setupSwagger } from './swagger';
 import morgan = require('morgan');
@@ -36,6 +37,7 @@ app.get('/api-docs', (req: Request, res: Response) => {
   res.json(console.log("test",req.path));
 });
 
+app.use('/api/support', supportRoutes);
 
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
