@@ -39,6 +39,6 @@ app.get("/api-docs", (req: Request, res: Response) => {
 
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
-  console.log("Swagger docs at http://localhost:5000/api-docs");
+  console.log(`Swagger docs at http://localhost:${process.env.PORT}/api-docs`);
   connectDB(process.env.MONGODB_URI as string);
 });
