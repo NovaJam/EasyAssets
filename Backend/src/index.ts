@@ -4,7 +4,7 @@ import express, { Request, Response } from 'express';
 import { connectDB } from './lib/connectDB'
 import authRoutes from './routes/authRouter';
 import cookieParser from 'cookie-parser';
-import { setupSwagger } from '../swagger';
+import { setupSwagger } from './swagger';
 import morgan = require('morgan');
 import { nanoid } from 'nanoid';
 const id = nanoid();
