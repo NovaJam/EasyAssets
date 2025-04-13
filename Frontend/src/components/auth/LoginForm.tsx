@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { login } from "../../routes/authRoute";
+import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
+
+  const navigate = useNavigate();
 
   // Handle form submission with basic validation
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,9 +25,13 @@ const LoginForm = () => {
     try {
       const response = await login(email, password);
       console.log("Login successful", response); // Handle successful login response
-    } catch (error) {
-      setError("Login failed. Please check your credentials.");
-      console.error("Login error:", error); // Log the error for debugging
+      navigate("/user-landing");
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      const backendMessage =
+        error.response?.data?.message || "Login failed. Please try again.";
+      setError(backendMessage);
+      console.error("Login error:", error);
     }
   };
   return (
