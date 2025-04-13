@@ -3,6 +3,7 @@ import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import Dashboard from "./pages/Dashboard";
 
+
 function App() {
   return (
     <BrowserRouter>
