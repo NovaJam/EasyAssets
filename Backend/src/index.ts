@@ -6,7 +6,9 @@ import authRoutes from './routes/authRouter';
 import cookieParser from 'cookie-parser';
 import { setupSwagger } from '../swagger';
 import morgan = require('morgan');
-
+import { nanoid } from 'nanoid';
+const id = nanoid();
+console.log(id)
 const app = express();
 const port = 5000;
 app.use(morgan('dev', {
