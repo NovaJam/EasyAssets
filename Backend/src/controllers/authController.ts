@@ -6,7 +6,10 @@ import {
   createUser,
 } from "../services/User-Services/user.service";
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
+import { jwtToken } from "../env";
+
+const JWT_SECRET = jwtToken as string; // Log the JWT_SECRET value
+
 if (!JWT_SECRET) {
   throw new Error("JWT_SECRET is not defined");
 }
@@ -100,12 +103,11 @@ export const resetPassword = async (
   try {
     const { email, newPassword } = req.body;
     if (!email || !newPassword) {
-      res
-        .status(400)
-        .json({
-          success: false,
-          message: "Please provide email and new password",
-        });
+      res.status(400).json({
+        success: false,
+        message: "Please provide email and new password",
+      });
+
       return;
     }
     const user = await getUserByEmail(email);
