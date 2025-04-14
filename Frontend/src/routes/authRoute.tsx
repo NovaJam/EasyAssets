@@ -10,10 +10,13 @@ export const login = async (
   password: string
 ): Promise<LoginResponse> => {
   try {
-    const response = await axios.post<LoginResponse>(`${AUTH_URL}/login`, {
-      email,
-      password,
-    });
+    const response = await axios.post<LoginResponse>(
+      `${AUTH_URL}/api/auth/login`,
+      {
+        email,
+        password,
+      }
+    );
 
     return response.data; // Return the login response data
   } catch (error) {
@@ -25,7 +28,7 @@ export const login = async (
 // For Signup Route
 export const signup = async (data: SignupData): Promise<void> => {
   try {
-    await axios.post(`${AUTH_URL}/signup`, data);
+    await axios.post(`${AUTH_URL}/api/auth/signup`, data);
     console.log("Signup Success");
   } catch (error) {
     console.error("Signup error:", error);
