@@ -18,6 +18,7 @@ interface IAsset extends Document {
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;
+  isDeleted: Boolean;
 }
 
 const assetSchema = new Schema<IAsset>(
@@ -38,6 +39,7 @@ const assetSchema = new Schema<IAsset>(
     nextMaintenance: { type: Date },
     qrCodeUrl: { type: String },
     createdBy: { type: String, required: true },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
