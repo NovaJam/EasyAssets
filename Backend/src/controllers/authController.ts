@@ -109,6 +109,7 @@ export const resetPassword = async (
         success: false,
         message: "Please provide email and new password",
       });
+
       return;
     }
     const user = await getUserByEmail(email);
