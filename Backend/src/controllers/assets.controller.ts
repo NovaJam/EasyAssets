@@ -39,7 +39,6 @@ export const getAll = async (req: Request, res: Response) => {
       console.log("Assets not found in the database");
       res.status(200).json({ message: "No assets found in database" });
     } else {
-      console.log("Assets found in the database", assets);
       res.status(200).json({
         message: "We go all the assets for you",
         data: assets.filter((el) => !(el.isDeleted === true)),
