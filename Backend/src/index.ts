@@ -1,13 +1,18 @@
-import dotenv from "dotenv";
-dotenv.config();
-import express, { Request, Response } from "express";
-import { connectDB } from "./lib/connectDB";
-import authRoutes from "./routes/authRouter";
-import cookieParser from "cookie-parser";
-import { setupSwagger } from "../swagger";
-import morgan = require("morgan");
 
+import dotenv from 'dotenv';
+dotenv.config()
+import express, { Request, Response } from 'express';
+import { connectDB } from './lib/connectDB'
+import authRoutes from './routes/authRouter';
+import categoryRoutes from './routes/categoryRouter';
+import cookieParser from 'cookie-parser';
+import { setupSwagger } from './swagger';
+import morgan = require('morgan');
+import { nanoid } from 'nanoid';
 const cors = require("cors");
+
+const id = nanoid();
+console.log(id)
 
 const app = express();
 const port = 5000;
@@ -21,7 +26,10 @@ app.use(
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // or '*', but avoid that in prod
+origin: [
+      "http://localhost:5173",
+      "https://easyassets.vercel.app"
+    ],
     credentials: true,
   })
 );
@@ -34,11 +42,16 @@ setupSwagger(app);
 
 app.use("/api/auth", authRoutes);
 
-app.get("/", (req: Request, res: Response) => {
+
+app.use('/api/auth', authRoutes);
+app.use('/api/categories', categoryRoutes)
+
+app.get('/', (req: Request, res: Response) => {
   res.json(console.log(req.path));
 });
 
-app.get("/api-docs", (req: Request, res: Response) => {
+app.get('/api-docs', (req: Request, res: Response) => {
+
   res.json(console.log("test", req.path));
 });
 
