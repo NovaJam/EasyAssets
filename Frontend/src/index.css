@@ -26,3 +26,12 @@
 ::-webkit-scrollbar-thumb:hover {
   background-color: #94a3b8;
 }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* Accounts for fixed navbar */
+}
+
+body {
+  margin-top: 4rem; /* Prevents content from being hidden under fixed navbar */
+}
