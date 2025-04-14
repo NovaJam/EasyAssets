@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 
 import {
   authAdmin,
@@ -8,7 +8,6 @@ import {
   getAssetRoute,
   updatedRoute,
 } from "../controllers/assetsController";
-import { getAssetsById } from "../services/Asset-Service/asset.service";
 
 const router = Router();
 

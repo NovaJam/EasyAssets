@@ -1,4 +1,4 @@
-import { Asset } from "../../models/assetModel";
+import { Asset } from "../../models/asset/assetModel";
 
 export const getAssets = () => {
   return Asset.find({});
