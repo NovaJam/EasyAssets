@@ -1,4 +1,4 @@
-import mongoose, {Document, Schema} from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 import { nanoid } from "nanoid";
 
 const id = nanoid();
@@ -6,6 +6,7 @@ const id = nanoid();
 export interface Support extends Document {
     ticketId: string;
     subject: string;
+    user: mongoose.Types.ObjectId;  // Reference to User model
     userName: string;
     userEmail: string;
     message: string;
@@ -24,16 +25,22 @@ const supportSchema = new Schema<Support>({
     },
     subject: {
         type: String,
+        required: [true, 'Subject is required'],
+        trim: true,
+    },
+    user: { 
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     userName: {
         type: String,
-        required: true
+        required: [true, 'Name is required'],
+        trim: true,
     },
     userEmail: {
         type: String,
         required: [true, 'Email is required'],
-        unique: true,
         lowercase: true,
         trim: true,
         match: [
@@ -43,7 +50,8 @@ const supportSchema = new Schema<Support>({
       },
     message: {
         type: String,
-        required: true
+        required: [true, 'Message is required'],
+        trim: true,
     },
     status: {
         type: String,
@@ -64,4 +72,11 @@ const supportSchema = new Schema<Support>({
     },
 });
 
+// Add pre-save hook for resolvedAt
+supportSchema.pre<Support>('save', function(next) {
+    if (this.isModified('status') && this.status === 'resolved') {
+        this.resolvedAt = new Date();
+    }
+    next();
+});
 export const SupportModel = mongoose.model<Support>('Support Ticket', supportSchema);

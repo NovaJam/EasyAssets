@@ -1,5 +1,5 @@
-import express from "express";
-import { newTicket, getAllTickets, getTicketById, deleteTicketById, updateTicketById, admin} from "../controllers/supportController";
+import express, {Response, Request} from "express";
+import { newTicket, getAllTickets, getTicketById, CloseTicketById, updateTicketById, isSupport } from "../controllers/supportController";
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ const router = express.Router();
 *   post:
 *     summary: creates new support ticket for the user
 *     tags:
-*       - Issue
+*       - Support
 *     responses:
 *       '200':
 *         description: Success response
@@ -50,91 +50,98 @@ router.post('/new', newTicket);
 * @swagger
 * /api/support/getAll:
 *   get:
-*     summary: Rertrieve all support tickets (Admin only)
-*     tags: [Support, help, ticket]
+*     summary: Rertrieve all support tickets (support only)
+*     tags:
+*       - Support
 *     responses:
-*       201:
-*         description: successfully retrieved all tickets
-*       400:
+*       '200':
+*         description: Success
+*       '400':
 *         description: No tickets found
-*       500:
-*         description: Internal server error
+*       '500':
+*         description: Server Error
+* 
 */
-router.get('/getAll', admin, getAllTickets);
+router.get('/getAll', isSupport, (req, res) => getAllTickets(req, res));
 
 /**
- * @swagger
- * /api/support/get/{id}:
- *   get:
- *     summary: Get all support tickets by ID (Admin only)
- *     tags: [Support, help, ticket]
- *     responses:
- *       200:
- *         description: List of all support tickets
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: string
- *                       subject:
- *                 type: string
- *               userName:
- *                 type: string
- *               userEmail:
- *                 type: string
- *               message:
- *                 type: string
- *       400:
- *         description: No tickets found
- *       500:
- *         description: Internal server error
- */
-router.get('/get/:id', admin, getTicketById);
+* @swagger
+* /api/support/get/:id:
+*   get:
+*     summary: Get all support tickets by ID (support only)
+*     tags:
+*       - Support
+*     responses:
+*       '200':
+*         description: Success
+*       '400':
+*         description: No tickets found
+*       '500':
+*         description: Server Error
+* 
+*/
+router.get('/get/:id', isSupport, getTicketById);
 
 /**
- * @swagger
- * /api/support/delete/{id}:
- *   delete:
- *     summary: Removes a ticket (Admin only)
- *     tags: [ticket, support, help]
- *     description: Deletes a ticket by ID (Admin only)
- *     parameters:
- *         id: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Ticket deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *       400:
- *         description: Category ID is required
- *       401:
- *         description: Authentication required
- *       403:
- *         description: Access denied (Admin role required)
- *       404:
- *         description: Category not found
- *       500:
- *         description: Internal server error
- */
-router.delete('/delete/:id', admin, deleteTicketById);
+* @swagger
+* /api/support/update/:id:
+*   patch:
+*     summary: update support ticket by ID (support only)
+*     tags:
+*       - Support
+*     responses:
+*       '200':
+*         description: Success
+*       '304':
+*         description: Not Modified
+*       '400':
+*         description: Failed to update support ticket
+*       '500':
+*         description: Server error
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               status:
+*                 type: string
+*                 description: status of the ticket (resolved, open)
+*             required:
+*               - status
+* 
+*/
+router.patch('/update/:id', isSupport, updateTicketById);
+
+/**
+* @swagger
+* /api/support/delete/:id:
+*   delete:
+*     summary: ' Closes a ticket by ID (support only)'
+*     tags:
+*       - Support
+*     responses:
+*       '204':
+*         description: resource deleted successfully
+*       '400':
+*         description: Failed to update delete ticket
+*       '500':
+*         description: Server error
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               id:
+*                 type: string
+*                 description: ticket ID
+*             required:
+*               - id
+* 
+*/
+router.delete('/delete/:id', isSupport, CloseTicketById);
 
 export default router;
