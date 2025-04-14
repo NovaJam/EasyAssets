@@ -3,10 +3,13 @@ dotenv.config()
 import express, { Request, Response } from 'express';
 import { connectDB } from './lib/connectDB'
 import authRoutes from './routes/authRouter';
+import categoryRoutes from './routes/categoryRouter';
 import cookieParser from 'cookie-parser';
-import { setupSwagger } from '../swagger';
+import { setupSwagger } from './swagger';
 import morgan = require('morgan');
-
+import { nanoid } from 'nanoid';
+const id = nanoid();
+console.log(id)
 const app = express();
 const port = 5000;
 app.use(morgan('dev', {
@@ -25,13 +28,14 @@ setupSwagger(app);
 
 
 app.use('/api/auth', authRoutes);
+app.use('/api/categories', categoryRoutes)
 
 app.get('/', (req: Request, res: Response) => {
   res.json(console.log(req.path));
 });
 
 app.get('/api-docs', (req: Request, res: Response) => {
-  res.json(console.log("test",req.path));
+  res.json(console.log("test", req.path));
 });
 
 
