@@ -15,9 +15,7 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-
 router.get("/", getAll);
-
 /**
  * @swagger
  * /api/assets:
@@ -74,7 +72,6 @@ router.get("/", getAll);
  *       500:
  *         description: Internal server error
  */
-
 router.post("/", create);
 
 export default router;

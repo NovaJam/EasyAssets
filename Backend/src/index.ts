@@ -1,19 +1,19 @@
-
-import dotenv from 'dotenv';
-dotenv.config()
-import express, { Request, Response } from 'express';
-import { connectDB } from './lib/connectDB'
-import authRoutes from './routes/authRouter';
-import categoryRoutes from './routes/categoryRouter';
-import cookieParser from 'cookie-parser';
-import { setupSwagger } from './swagger';
-import morgan = require('morgan');
-import { nanoid } from 'nanoid';
+import dotenv from "dotenv";
+import express, { Request, Response } from "express";
+import { connectDB } from "./lib/connectDB";
+import authRoutes from "./routes/authRouter";
+import categoryRoutes from "./routes/categoryRouter";
+import cookieParser from "cookie-parser";
+import { setupSwagger } from "./swagger";
+import morgan = require("morgan");
+import { nanoid } from "nanoid";
 import assets from "./routes/assetsRouter";
+
+dotenv.config();
 const cors = require("cors");
 
 const id = nanoid();
-console.log(id)
+console.log(id);
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -32,9 +32,8 @@ app.use(cookieParser());
 //For API Docs using Swagger UI
 setupSwagger(app);
 
-
-app.use('/api/auth', authRoutes);
-app.use('/api/categories', categoryRoutes)
+app.use("/api/auth", authRoutes);
+app.use("/api/categories", categoryRoutes);
 app.use("/api/assets", assets);
 
 app.get("/", (req: Request, res: Response) => {

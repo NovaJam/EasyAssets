@@ -6,12 +6,10 @@ import {
   createUser,
 } from "../services/User-Services/user.service";
 
-require("dotenv").config({ path: ".env.local" }); // Added this line to load env variables from .env.local file
+import dotenv from "dotenv";
+dotenv.config(); // Load environment variables from .env file
 
-const random = process.env.RANDOM as string;
-console.log(random);
-
-const JWT_SECRET = jwtToken as string; // Log the JWT_SECRET value
+const JWT_SECRET = process.env.JWT_SECRET as string; // Log the JWT_SECRET value
 
 if (!JWT_SECRET) {
   throw new Error("JWT_SECRET is not defined");
