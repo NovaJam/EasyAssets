@@ -6,7 +6,10 @@ import {
   createUser,
 } from "../services/User-Services/user.service";
 
-import { jwtToken } from "../env";
+require("dotenv").config({ path: ".env.local" }); // Added this line to load env variables from .env.local file
+
+const random = process.env.RANDOM as string;
+console.log(random);
 
 const JWT_SECRET = jwtToken as string; // Log the JWT_SECRET value
 
@@ -96,6 +99,7 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
       .json({ success: false, message: "Internal Server error", error: err });
   }
 };
+
 export const resetPassword = async (
   req: Request,
   res: Response
