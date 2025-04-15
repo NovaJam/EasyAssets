@@ -10,11 +10,12 @@ import {
 import { assetSchema, updateSchema } from "../validators/asset/asset.validator";
 import { ZodError } from "zod";
 import { v4 as createUniqueId } from "uuid";
+import { nanoid } from "nanoid";
 
 export const create = async (req: Request, res: Response) => {
   try {
     const validatedAsset = assetSchema.parse(req.body);
-    const saveAsset = { assetId: createUniqueId(), ...validatedAsset };
+    const saveAsset = { assetId: nanoid(), ...validatedAsset };
     console.log("we managed to validate the asset !!!", saveAsset);
 
     await createAsset(req.body);
