@@ -4,6 +4,8 @@ import Signup from "./pages/auth/Signup";
 import Dashboard from "./pages/Dashboard";
 import LandingPage from "./pages/LandingPage";
 import IssueTrackerDashboard from "./pages/IssueTracker/IssueTrackerDashboard";
+import SecurityQn from "./components/auth/SecurityQn";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element = {<Dashboard/>}/>
         <Route path="/issue-tracker" element={<IssueTrackerDashboard/>}/>
+        <Route path="/security-check" element={<SecurityQn/>}/>
+        <Route path="/resetPassword" element={<ResetPassword/>}/>
       </Routes>
     </BrowserRouter>
   );
