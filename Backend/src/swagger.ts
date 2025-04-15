@@ -11,7 +11,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:5000',
+      url: 'https://easyassets-production.up.railway.app',
       description: 'Development server',
     },
   ],
