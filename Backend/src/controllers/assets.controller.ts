@@ -5,7 +5,7 @@ import {
   getAssets,
   deleteAsset,
   getAssetsById,
-  updateAseet,
+  updateAsset,
 } from "../services/User-Services/assets.service";
 import { assetSchema, updateSchema } from "../validators/asset/asset.validator";
 import { ZodError } from "zod";
@@ -153,7 +153,7 @@ export const updatedRoute = async (req: Request, res: Response) => {
       return;
     }
     const upadatedData = req.body;
-    const modified = await updateAseet(id, upadatedData);
+    const modified = await updateAsset(id, upadatedData);
 
     if (!modified) {
       res.status(400).json({
