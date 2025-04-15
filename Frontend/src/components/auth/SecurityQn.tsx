@@ -66,10 +66,15 @@ const SecurityQn = () => {
             const apiResponse = true; // This would come from the actual API response
 
             if (apiResponse) {
+                // Show success toast
                 toast.success("Identity verified successfully!", {
-                  duration: 1500
+                  duration: 2000 // Longer duration to ensure visibility
                 });
                 
+                // Wait for toast to be visible before navigating
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+                
+                // Then navigate
                 navigate("/resetPassword", { replace: true, state: { verified: true } });
               } else {
                 toast.error("Security answers verification failed. Please try again.");
