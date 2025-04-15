@@ -1,44 +1,48 @@
-
-import express from 'express';
-import { signup, login, logout, resetPassword } from "../controllers/authController";
+import express from "express";
+import {
+  signup,
+  login,
+  logout,
+  resetPassword,
+} from "../controllers/authController";
 
 const router = express.Router();
 
 /**
-* @swagger
-* /api/auth/signup:
-*   post:
-*     summary: Register a new user
-*     tags: [Auth]
-*     requestBody:
-*       required: true
-*       content:
-*         application/json:
-*           schema:
-*             type: object
-*             required:
-*               - name
-*               - email
-*               - password
-*               - role
-*             properties:
-*               name:
-*                 type: string
-*               email:
-*                 type: string
-*               password:
-*                 type: string
-*               role:
-*                 type: string
-*     responses:
-*       201:
-*         description: User created successfully
-*       400:
-*         description: User already exists
-*       500:
-*         description: Internal server error
-*/
-router.post('/signup', signup);
+ * @swagger
+ * /api/auth/signup:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *               - role
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *       400:
+ *         description: User already exists
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/signup", signup);
 
 /**
  * @swagger
@@ -70,7 +74,7 @@ router.post('/signup', signup);
  *       500:
  *         description: Internal server error
  */
-router.post('/login', login);
+router.post("/login", login);
 
 /**
  * @swagger
@@ -86,7 +90,7 @@ router.post('/login', login);
  *       500:
  *         description: Internal server error
  */
-router.post('/logout', logout);
+router.post("/logout", logout);
 
 /**
  * @swagger
@@ -118,6 +122,6 @@ router.post('/logout', logout);
  *       500:
  *         description: Internal server error
  */
-router.patch('/reset-password', resetPassword);
+router.patch("/reset-password", resetPassword);
 
 export default router;

@@ -6,12 +6,11 @@ import {
   createUser,
 } from "../services/User-Services/user.service";
 
-require("dotenv").config({ path: ".env.local" }); // Added this line to load env variables from .env.local file
+import dotenv from "dotenv";
+dotenv.config(); // Load environment variables from .env file
 
-const random = process.env.RANDOM as string;
-console.log(random);
+const JWT_SECRET = process.env.JWT_SECRET as string; // Log the JWT_SECRET value
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
 if (!JWT_SECRET) {
   throw new Error("JWT_SECRET is not defined");
 }
@@ -42,7 +41,6 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       .json({ success: false, message: "Something went wrong", error: err });
   }
 };
-
 export const login = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body || {};
   if (!email || !password) {
@@ -80,7 +78,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       .json({ success: false, message: "Internal Server error", error: err });
   }
 };
-
 export const logout = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.cookies?.sessionToken) {
@@ -112,6 +109,7 @@ export const resetPassword = async (
         success: false,
         message: "Please provide email and new password",
       });
+
       return;
     }
     const user = await getUserByEmail(email);
