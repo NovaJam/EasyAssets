@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import { connectDB } from "./lib/connectDB";
 import authRoutes from "./routes/authRouter";
+import otpRoutes from "./routes/otpRouter";
 import categoryRoutes from "./routes/categoryRouter";
 import cookieParser from "cookie-parser";
 import { setupSwagger } from "./swagger";
@@ -29,6 +30,7 @@ app.use(cookieParser());
 setupSwagger(app);
 
 app.use("/api/auth", authRoutes);
+app.use("/api/otp", otpRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/assets", assets);
 
