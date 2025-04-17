@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/cors": "^2.8.17",
     "@types/nodemailer": "^6.4.17",
     "bcrypt": "^5.1.1",
     "body-parser": "^2.2.0",
