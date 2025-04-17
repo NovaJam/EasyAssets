@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { SignupData } from "../../types/auth";
 import { signup } from "../../routes/authRoute"; // Assuming this is your signup API function
+import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState<SignupData>({
@@ -9,12 +11,17 @@ const SignupForm = () => {
     password: "",
     confirm_password: "",
     organisation_name: "",
+    role: "User", // default role value
   });
 
   const [error, setError] = useState<string>("");
 
+  const navigate = useNavigate();
+
   // Handle input changes and update state
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -47,10 +54,14 @@ const SignupForm = () => {
     try {
       await signup(formData); // Call the signup function from authRoute
       console.log("Signup successful");
+      navigate("/login");
       // Optionally, redirect or show success message here
-    } catch (error) {
-      setError("Signup failed. Please try again.");
-      console.error("Signup error:", error);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      const backendMessage =
+        error.response?.data?.message || "Login failed. Please try again.";
+      setError(backendMessage);
+      console.error("Login error:", error);
     }
   };
 
@@ -122,6 +133,23 @@ const SignupForm = () => {
             className="w-full p-2 border border-gray-300 rounded-md"
             required
           />
+        </div>
+
+        <div>
+          <label htmlFor="role" className="block text-sm font-medium">
+            Role
+          </label>
+          <select
+            id="role"
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded-md"
+            required
+          >
+            <option value="User">User</option>
+            <option value="Admin">Admin</option>
+          </select>
         </div>
 
         <div>
