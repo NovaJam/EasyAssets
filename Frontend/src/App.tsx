@@ -32,17 +32,6 @@ import { AuthProvider } from "./context/AuthContext";
 // };
 function App() {
   return (
-//     <BrowserRouter>
-//       <Routes>
-//       <Route path="/" element={<LandingPage />} />
-//         <Route path="/login" element={<Login />} />
-//         <Route path="/signup" element={<Signup />} />
-//         <Route path="/dashboard" element = {<Dashboard/>}/>
-//         <Route path="/issue-tracker" element={<IssueTrackerDashboard/>}/>
-//         <Route path="/security-check" element={<SecurityQn/>}/>
-//         <Route path="/resetPassword" element={<ResetPassword/>}/>
-//       </Routes>
-//     </BrowserRouter>
     <AuthProvider>
       <BrowserRouter>
         {/* <LoginSimulator /> */}
@@ -54,6 +43,8 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/issue-tracker" element={<IssueTrackerDashboard />} />
             <Route path="/asset-management" element={<AssetManagement />} />
+            <Route path="/security-check" element={<SecurityQn/>}/>
+            <Route path="/resetPassword" element={<ResetPassword/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
