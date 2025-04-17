@@ -2,7 +2,7 @@ import axios from "axios";
 import { LoginResponse } from "../types/auth";
 import { SignupData } from "../types/auth";
 
-const AUTH_URL = "http://localhost:5000"; // Adjust to the route of the backend
+const AUTH_URL = import.meta.env.VITE_AUTH_URL; // http://localhost:5000 for local development and production URL for deployment
 
 // For Login Route
 export const login = async (
