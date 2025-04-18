@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { getSupportTickets, getSupportTicketById } from '../services/Support-Services/supportTickets';
 import { SupportModel } from '../models/support/supportModel';
 import { getUserById } from "../services/User-Services/user.service";
+import { getAssetsById } from '../services/User-Services/assets.service';
 import jwt from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
 const id = nanoid();
@@ -51,8 +52,6 @@ if (!JWT_SECRET) {
 //     }
 // }
 
-// make ticket 
-
 export const isSupport = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const token = req.cookies.sessionToken;
@@ -89,9 +88,9 @@ export const isSupport = async (req: Request, res: Response, next: NextFunction)
     }
 };
 
-
+// Create a new support ticket
 export const newTicket = async (req: Request, res: Response): Promise<void> => {
-    const { subject, message } = req.body;
+    const { subject, message, assetId } = req.body;
     try {
         // 1. Authentication Check
         const token = req.cookies.sessionToken;
@@ -105,6 +104,12 @@ export const newTicket = async (req: Request, res: Response): Promise<void> => {
         const user = await getUserById(decoded.id);
         if (!user) {
             res.status(401).json({ error: 'Invalid user' });
+            return;
+        }
+
+        const asset = await getAssetsById(assetId);
+        if (!asset) {
+            res.status(404).json({ error: 'Asset not found' });
             return;
         }
 
@@ -255,4 +260,39 @@ export const CloseTicketById = async (req: Request, res: Response): Promise<void
             error: 'Failed to resolve support ticket' 
         });
     }
-};
+}
+
+    // Get the ticket from the assetId (if it exists) 
+    export const getTicketByAssetId = async (req: Request, res: Response): Promise<void> => {
+        const { assetId } = req.params;
+        try {
+            const token = req.cookies.sessionToken;
+            const decoded = jwt.verify(token, JWT_SECRET) as { id: string, role: string };
+            const user = await getUserById(decoded.id);
+
+            if (!user) {
+                res.status(401).json({ error: 'User not found' });
+                return;
+            }
+
+            const filter = user.role === 'Support' ? {} : {
+                assetId,
+                user: decoded.id,
+                status: 'open',
+            };
+
+            const tickets = await getSupportTickets(filter);
+             res.status(200).json({ tickets });
+
+             if(!tickets) {
+                res.status(404).json({ success: false, message: "No tickets found" });
+                return;
+             }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ 
+                success: false, 
+                error: 'Failed to fetch support tickets'
+            });
+        }
+    };
