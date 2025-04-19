@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { login } from "../../routes/authRoute";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 
 const LoginForm = () => {
@@ -34,6 +34,7 @@ const LoginForm = () => {
       console.error("Login error:", error);
     }
   };
+
   return (
     <div className="w-full max-w-md mx-auto p-4">
       <h2 className="text-2xl font-semibold mb-4">Log In</h2>
@@ -71,10 +72,9 @@ const LoginForm = () => {
           />
         </div>
 
-        <a href="/signup">
-          Don't have account?{" "}
-          <span className="underline-offset-1 underline">Signup</span>
-        </a>
+        <NavLink to={"/resetPassword"}>
+          <span className="underline-offset-1 underline">Forgot Password?</span>
+        </NavLink>
 
         <button
           type="submit"
@@ -82,6 +82,11 @@ const LoginForm = () => {
         >
           Log In
         </button>
+
+        <a href="/signup">
+          Don't have account?{" "}
+          <span className="underline-offset-1 underline">Signup</span>
+        </a>
       </form>
     </div>
   );
