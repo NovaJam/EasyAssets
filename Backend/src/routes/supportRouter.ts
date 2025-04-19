@@ -25,6 +25,8 @@ const router = express.Router();
  *         description: Created successfully
  *       '400':
  *         description: Bad request
+ *       '500':
+ *         description: Server Error
  *     requestBody:
  *       required: true
  *       content:
@@ -41,6 +43,9 @@ const router = express.Router();
  *               subject:
  *                 type: string
  *                 description: Subject of the ticket
+ *               assetId:
+ *                 type: string
+ *                 description: Asset ID (optional)
  *               message:
  *                 type: string
  *                 description: the content of the support ticket
@@ -73,27 +78,41 @@ router.get("/getAll", isSupport, (req, res) => getAllTickets(req, res));
 
 /**
  * @swagger
- * /api/support/get/:id:
+ * /api/support/get/{ticketId}:
  *   get:
- *     summary: Get all support tickets by ID (support only)
+ *     summary: Get a support ticket by ID (support only)
  *     tags:
  *       - Support
+ *     parameters:
+ *       - in: path
+ *         name: ticketId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the support ticket to retrieve
  *     responses:
  *       '200':
- *         description: Success
+ *         description: Successfully retrieved the support ticket
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ticket:
+ *                   type: object
+ *                   description: Support ticket details
  *       '400':
- *         description: No tickets found
+ *         description: No ticket found with the provided ID
  *       '500':
- *         description: Server Error
- *
+ *         description: Server error
  */
-router.get("/get/:id", isSupport, getTicketById);
+router.get("/get/:ticketId", isSupport, getTicketById);
 
 /**
  * @swagger
- * /api/support/get/:assetid:
+ * /api/support/get/{assetid}:
  *   get:
- *     summary: // Get the ticket from the assetId (if it exists) and Support only
+ *     summary: Get the ticket from the assetId (if it exists) and Support only
  *     tags:
  *       - Support
  *     responses:
@@ -125,20 +144,18 @@ router.get("/get/:assetid", isSupport, getTicketByAssetId);
 
 /**
  * @swagger
- * /api/support/update/:id:
+ * /api/support/update/{ticketId}:
  *   patch:
- *     summary: update support ticket by ID (support only)
+ *     summary: Update support ticket by ID (support only)
  *     tags:
- *       - Support
- *     responses:
- *       '200':
- *         description: Success
- *       '304':
- *         description: Not Modified
- *       '400':
- *         description: Failed to update support ticket
- *       '500':
- *         description: Server error
+ *       - "Support"
+ *     parameters:
+ *       - in: path
+ *         name: ticketId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the support ticket to update
  *     requestBody:
  *       required: true
  *       content:
@@ -148,41 +165,46 @@ router.get("/get/:assetid", isSupport, getTicketByAssetId);
  *             properties:
  *               status:
  *                 type: string
- *                 description: status of the ticket (resolved, open)
+ *                 description: Status of the ticket
+ *                 enum: [open, resolved]
+ *                 default: open
  *             required:
  *               - status
- *
+ *     responses:
+ *       "200":
+ *         description: Success
+ *       "304":
+ *         description: Not Modified
+ *       "400":
+ *         description: Failed to update support ticket
+ *       "500":
+ *         description: Server error
  */
-router.patch("/update/:id", isSupport, updateTicketById);
+router.patch("/update/:ticketId", isSupport, updateTicketById);
 
 /**
  * @swagger
- * /api/support/delete/:id:
+ * /api/support/close/{id}:
  *   delete:
- *     summary: ' Closes a ticket by ID (support only)'
+ *     summary: Resolve (soft delete) a support ticket by ID (support only)
+ *     description: This endpoint marks a ticket as "resolved".
  *     tags:
- *       - Support
+ *       - "Support"
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the support ticket to resolve
  *     responses:
- *       '204':
- *         description: resource deleted successfully
- *       '400':
- *         description: Failed to update delete ticket
- *       '500':
+ *       "204":
+ *         description: Ticket marked as resolved successfully
+ *       "400":
+ *         description: Failed to resolve ticket
+ *       "500":
  *         description: Server error
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id:
- *                 type: string
- *                 description: ticket ID
- *             required:
- *               - id
- *
  */
-router.delete("/delete/:id", isSupport, CloseTicketById);
+router.delete("/close/:id", isSupport, CloseTicketById);
 
 export default router;

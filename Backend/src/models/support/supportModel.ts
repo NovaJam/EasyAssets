@@ -1,8 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { nanoid } from "nanoid";
 
-const id = nanoid();
-
 export interface Support extends Document {
   ticketId: string;
   subject: string;
@@ -22,7 +20,7 @@ const supportSchema = new Schema<Support>({
     type: String,
     required: true,
     unique: true,
-    default: id,
+    default: () => nanoid(),
   },
   subject: {
     type: String,
