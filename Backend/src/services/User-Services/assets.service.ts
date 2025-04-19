@@ -5,20 +5,20 @@ export const createAsset = async (values: Record<string, any>) => {
 };
 export const getAssets = async () => await Asset.find();
 
-export const deleteAsset = (id: string) => {
+export const deleteAsset = (assetId: string) => {
   return Asset.findByIdAndUpdate(
-    id,
+    { assetId }, // Query by custom assetId
     { isDeleted: true },
     { runValidators: true }
   );
 };
 
-export const getAssetsById = (id: string) => {
-  return Asset.findById(id);
+export const getAssetsById = (assetId: string) => {
+  return Asset.findOne({ assetId }); // Search by custom assetId field
 };
 
-export const updateAsset = (id: string, updateData: any) => {
-  return Asset.findByIdAndUpdate(id, {
+export const updateAsset = (assetId: string, updateData: any) => {
+  return Asset.findByIdAndUpdate({assetId}, {
     new: true,
     runValidators: true,
   });

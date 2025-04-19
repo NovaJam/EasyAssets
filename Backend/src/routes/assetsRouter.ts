@@ -13,20 +13,33 @@ import {
 
 /**
  * @swagger
- * /api/assets:
+ * /api/assets/get:
  *   get:
- *     summary: Get all Assets
- *     tags: [Assets]
+ *     summary: Get all assets
+ *     tags:
+ *       - "Assets"
  *     responses:
- *       200:
+ *       "200":
  *         description: Assets retrieved successfully
- *       500:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 assets:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     description: An asset object
+ *       "500":
  *         description: Internal server error
  */
-router.get("/", getAll);
+
+router.get("/get", getAll);
+
 /**
  * @swagger
- * /api/assets:
+ * /api/assets/new:
  *   post:
  *     summary: Register a new asset
  *     tags: [Assets]
@@ -80,21 +93,37 @@ router.get("/", getAll);
 *       500:
 *         description: Internal server error
 */
-router.post("/", authAdmin, create);
+router.post("/new", authAdmin, create);
 
 /**
  * @swagger
- * api/assets:
+ * /api/assets/get/{id}:
  *   get:
- *     summary: Get a specific asset by id
- *     tags: [Assets]
+ *     summary: Get a specific asset by ID
+ *     tags:
+ *       - "Assets"
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the asset to retrieve
  *     responses:
- *       200:
+ *       "200":
  *         description: Asset retrieved successfully
- *       500:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 asset:
+ *                   type: object
+ *                   description: The asset object
+ *       "500":
  *         description: Internal server error
  */
-router.get("/:id", getAssetRoute);
+router.get("/assets/get:id", getAssetRoute);
 
 /**
  * @swagger

@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import { setupSwagger } from './swagger';
 import morgan = require('morgan');
 import { nanoid } from 'nanoid';
+import { SupportModel } from './models/support/supportModel';
 const id = nanoid();
 console.log(id)
 import otpRoutes from "./routes/otpRouter";
@@ -56,6 +57,6 @@ app.use('/api/support', supportRoutes);
 
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
-  console.log(`Swagger docs at http://localhost:${process.env.PORT}/api-docs`);
+  console.log(`Swagger docs at http://localhost:${port}/api-docs`);
   connectDB(process.env.MONGODB_URI as string);
 });
