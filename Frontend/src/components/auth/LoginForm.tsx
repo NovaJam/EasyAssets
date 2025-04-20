@@ -36,13 +36,20 @@ const LoginForm = () => {
   };
   return (
     <div className="w-full max-w-md mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-4">Log In</h2>
-
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+      <h1 className="font-semibold text-4xl text-center text-gray-600">EasyAssets</h1>
+      <div className="mb-9 mt-6 space-y-1.5">
+        <h1 className="text-2xl font-semibold">Log in to your account</h1>
+        <p className="text-zinc-400">
+          Don't have an account?{" "}
+          <a href="signup" className="text-blue-400">
+            Create one.
+          </a>
+        </p>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium">
+          <label htmlFor="email" className="text-gray-800 block text-lg font-medium mb-2 ">
             Email
           </label>
           <input
@@ -52,12 +59,13 @@ const LoginForm = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md"
+            placeholder="you@example.com"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium">
+          <label htmlFor="password" className="text-gray-800 block text-lg font-medium mb-2">
             Password
           </label>
           <input
@@ -67,22 +75,20 @@ const LoginForm = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md"
+            placeholder="********"
             required
           />
         </div>
 
-        <a href="/signup">
-          Don't have account?{" "}
-          <span className="underline-offset-1 underline">Signup</span>
-        </a>
-
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-md mt-4"
+          className="w-full rounded-md bg-gradient-to-br from-blue-400 to-blue-700 px-4 py-2 text-lg text-zinc-50 ring-2 ring-blue-500/50 ring-offset-2 ring-offset-white transition-all hover:scale-[1.02] hover:ring-transparent active:scale-[0.98] active:ring-blue-500/70 mt-4"
         >
           Log In
         </button>
       </form>
+
+      {error && <p className="text-red-500 mt-4">{error}</p>}
     </div>
   );
 };

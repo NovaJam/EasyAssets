@@ -67,7 +67,7 @@ const SignupForm = () => {
 
   return (
     <div className="w-full max-w-md mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-4">Sign Up</h2>
+      <h2 className="text-4xl font-semibold text-gray-700 mb-4 text-center">Sign Up</h2>
 
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
@@ -171,12 +171,12 @@ const SignupForm = () => {
 
         <a href="/login">
           Already have an account?{" "}
-          <span className="underline underline-offset-1">Login</span>
+          <span className="text-blue-400">Login</span>
         </a>
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-md mt-4"
+          className="w-full rounded-md bg-gradient-to-br from-blue-400 to-blue-700 px-4 py-2 text-lg text-zinc-50 ring-2 ring-blue-500/50 ring-offset-2 ring-offset-white transition-all hover:scale-[1.02] hover:ring-transparent active:scale-[0.98] active:ring-blue-500/70 mt-4"
         >
           Sign Up
         </button>
