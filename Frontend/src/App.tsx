@@ -3,6 +3,7 @@ import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import Dashboard from "./pages/Dashboard";
 import LandingPage from "./pages/LandingPage";
+import Error from "./pages/Error";
 import IssueTrackerDashboard from "./pages/IssueTracker/IssueTrackerDashboard";
 import SecurityQn from "./components/auth/SecurityQn";
 import ResetPassword from "./pages/auth/ResetPassword";
@@ -46,6 +47,7 @@ function App() {
             <Route path="/security-check" element={<SecurityQn/>}/>
             <Route path="/resetPassword" element={<ResetPassword/>}/>
           </Route>
+           < Route path="*" element = {<Error/>}/>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
