@@ -35,3 +35,7 @@ html {
 body {
   margin-top: 4rem; /* Prevents content from being hidden under fixed navbar */
 }
+
+.errormt{
+  margin-top: 0;
+}

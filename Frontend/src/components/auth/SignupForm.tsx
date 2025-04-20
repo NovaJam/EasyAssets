@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SignupData } from "../../types/auth";
 import { signup } from "../../routes/authRoute"; // Assuming this is your signup API function
 import { AxiosError } from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const SignupForm = () => {
+
+      useEffect (() => {
+          document.body.classList.add("errormt");
+          return  () => {
+            document.body.classList.remove('errormt');
+          }
+      }, [])
+      
   const [formData, setFormData] = useState<SignupData>({
     name: "",
     email: "",
@@ -67,7 +75,7 @@ const SignupForm = () => {
 
   return (
     <div className="w-full max-w-md mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-4">Sign Up</h2>
+      <h2 className="text-2xl font-bold mb-4 text-purple-600 uppercase">Sign Up</h2>
 
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
@@ -80,6 +88,7 @@ const SignupForm = () => {
             type="text"
             id="name"
             name="name"
+            placeholder="Nova"
             value={formData.name}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -95,6 +104,7 @@ const SignupForm = () => {
             type="email"
             id="email"
             name="email"
+            placeholder="novadesigns@gnail.com"
             value={formData.email}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -110,6 +120,7 @@ const SignupForm = () => {
             type="password"
             id="password"
             name="password"
+            placeholder="********"
             value={formData.password}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -128,6 +139,7 @@ const SignupForm = () => {
             type="password"
             id="confirm_password"
             name="confirm_password"
+            placeholder="********"
             value={formData.confirm_password}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -163,20 +175,21 @@ const SignupForm = () => {
             type="text"
             id="organisation_name"
             name="organisation_name"
+            placeholder="Nova Designs"
             value={formData.organisation_name}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
 
-        <a href="/login">
-          Already have an account?{" "}
-          <span className="underline underline-offset-1">Login</span>
-        </a>
+         Already have an account?{" "}
+      <Link to  ="/Login">
+          <span className="underline underline-offset-1 text-purple-700">Login</span>
+      </Link>
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-md mt-4"
+          className="w-full hover:bg-purple-900 text-white p-2 rounded-md mt-4 bg-purple-500  hover:border-r-black"
         >
           Sign Up
         </button>
