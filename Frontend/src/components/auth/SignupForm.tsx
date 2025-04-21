@@ -1,24 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SignupData } from "../../types/auth";
 import { signup } from "../../routes/authRoute"; // Assuming this is your signup API function
 import { AxiosError } from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const SignupForm = () => {
+  useEffect(() => {
+    document.body.classList.add("errormt");
+    return () => {
+      document.body.classList.remove("errormt");
+    };
+  }, []);
+
   const [formData, setFormData] = useState<SignupData>({
     name: "",
     email: "",
     password: "",
     confirm_password: "",
     organisation_name: "",
-    role: "User", // default role value
+    role: "User",
   });
 
   const [error, setError] = useState<string>("");
 
   const navigate = useNavigate();
 
-  // Handle input changes and update state
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -29,11 +35,9 @@ const SignupForm = () => {
     });
   };
 
-  // Handle form submission with basic validation
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation checks
     if (
       !formData.name ||
       !formData.email ||
@@ -49,25 +53,24 @@ const SignupForm = () => {
       return;
     }
 
-    setError(""); // Clear error if everything is valid
+    setError("");
 
     try {
-      await signup(formData); // Call the signup function from authRoute
+      await signup(formData);
       console.log("Signup successful");
       navigate("/login");
-      // Optionally, redirect or show success message here
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       const backendMessage =
-        error.response?.data?.message || "Login failed. Please try again.";
+        error.response?.data?.message || "Signup failed. Please try again.";
       setError(backendMessage);
-      console.error("Login error:", error);
+      console.error("Signup error:", error);
     }
   };
 
   return (
     <div className="w-full max-w-md mx-auto p-4">
-      <h2 className="text-4xl font-semibold text-gray-700 mb-4 text-center">Sign Up</h2>
+      <h2 className="text-3xl font-bold mb-4 text-purple-600 uppercase text-center">Sign Up</h2>
 
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
@@ -80,6 +83,7 @@ const SignupForm = () => {
             type="text"
             id="name"
             name="name"
+            placeholder="Nova"
             value={formData.name}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -95,6 +99,7 @@ const SignupForm = () => {
             type="email"
             id="email"
             name="email"
+            placeholder="novadesigns@gmail.com"
             value={formData.email}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -110,6 +115,7 @@ const SignupForm = () => {
             type="password"
             id="password"
             name="password"
+            placeholder="********"
             value={formData.password}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -118,16 +124,14 @@ const SignupForm = () => {
         </div>
 
         <div>
-          <label
-            htmlFor="confirm_password"
-            className="block text-sm font-medium"
-          >
+          <label htmlFor="confirm_password" className="block text-sm font-medium">
             Confirm Password
           </label>
           <input
             type="password"
             id="confirm_password"
             name="confirm_password"
+            placeholder="********"
             value={formData.confirm_password}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -153,30 +157,30 @@ const SignupForm = () => {
         </div>
 
         <div>
-          <label
-            htmlFor="organisation_name"
-            className="block text-sm font-medium"
-          >
+          <label htmlFor="organisation_name" className="block text-sm font-medium">
             Organisation Name (Optional)
           </label>
           <input
             type="text"
             id="organisation_name"
             name="organisation_name"
+            placeholder="Nova Designs"
             value={formData.organisation_name}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
 
-        <a href="/login">
+        <div className="text-sm text-center">
           Already have an account?{" "}
-          <span className="text-blue-400">Login</span>
-        </a>
+          <Link to="/login" className="underline text-purple-700">
+            Login
+          </Link>
+        </div>
 
         <button
           type="submit"
-          className="w-full rounded-md bg-gradient-to-br from-blue-400 to-blue-700 px-4 py-2 text-lg text-zinc-50 ring-2 ring-blue-500/50 ring-offset-2 ring-offset-white transition-all hover:scale-[1.02] hover:ring-transparent active:scale-[0.98] active:ring-blue-500/70 mt-4"
+          className="w-full bg-purple-500 hover:bg-purple-900 text-white p-2 rounded-md mt-4 transition-all"
         >
           Sign Up
         </button>
