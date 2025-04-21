@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { login } from "../../routes/authRoute";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 
 const LoginForm = () => {
+
+  useEffect (() => {
+    document.body.classList.add('errormt');
+
+    return () =>{
+      document.body.classList.remove('errormt');
+    }
+  } )
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -34,18 +42,12 @@ const LoginForm = () => {
       console.error("Login error:", error);
     }
   };
+
   return (
     <div className="w-full max-w-md mx-auto p-4">
-      <h1 className="font-semibold text-4xl text-center text-gray-600">EasyAssets</h1>
-      <div className="mb-9 mt-6 space-y-1.5">
-        <h1 className="text-2xl font-semibold">Log in to your account</h1>
-        <p className="text-zinc-400">
-          Don't have an account?{" "}
-          <a href="signup" className="text-blue-400">
-            Create one.
-          </a>
-        </p>
-      </div>
+      <h2 className="text-2xl font-bold mb-4 text-purple-500">Log In</h2>
+
+      {error && <p className="text-red-500 mb-4">{error}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -75,17 +77,26 @@ const LoginForm = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md"
-            placeholder="********"
             required
           />
         </div>
 
+             Creatw an account?{" "}
+     <Link to  ="/SignUp">
+          <span className="underline underline-offset-1 text-purple-700">Sign Up</span>
+      </Link>
+
         <button
           type="submit"
-          className="w-full rounded-md bg-gradient-to-br from-blue-400 to-blue-700 px-4 py-2 text-lg text-zinc-50 ring-2 ring-blue-500/50 ring-offset-2 ring-offset-white transition-all hover:scale-[1.02] hover:ring-transparent active:scale-[0.98] active:ring-blue-500/70 mt-4"
+          className="w-full hover:bg-purple-900 text-white p-2 rounded-md mt-4 bg-purple-500  hover:border-r-black"
         >
           Log In
         </button>
+
+        <a href="/signup">
+          Don't have account?{" "}
+          <span className="underline-offset-1 underline">Signup</span>
+        </a>
       </form>
 
       {error && <p className="text-red-500 mt-4">{error}</p>}
