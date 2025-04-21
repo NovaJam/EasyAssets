@@ -17,7 +17,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: process.env.SWAGGER_URL || 3000,
+      url: 'https://easyassets-production.up.railway.app',
       description: "Development server",
     },
   ],
