@@ -1,148 +1,150 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import { toast, Toaster } from "react-hot-toast";
-import { SecurityQuestion } from "../../types/auth";
-import { getSchema } from "../../validators/auth.validator";
-import { fetchUserSecurityQuestions, verifySecurityAnswers } from "../../services/auth.service";
+import { toast } from "react-hot-toast";
+import axios from "axios";
+import { SecurityQuestion, SecurityQuestionAnswer } from "../../types/auth";
+import { mockQuestions } from "../../Mock/mockQuestions";
+
+
 
 const SecurityQn = () => {
-  const navigate = useNavigate();
+    const [answers, setAnswers] = useState<{ [key: number]: string }>({});
+    const [errors, setErrors] = useState<{ [key: number]: string }>({});
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [questions, setQuestions] = useState<SecurityQuestion[] | null>(null);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [errors, setErrors] = useState<Record<number, string>>({});
-  const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
+    // Will be fetched from API in a real implementation
+    const questions: SecurityQuestion[] = mockQuestions;
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+    const validateAnswers = (): boolean => {
+        const newErrors: { [key: number]: string } = {};
+        let isValid = true;
 
-  const fetchQuestions = async () => {
-    setIsLoadingQuestions(true);
-    try {
-      const data = await fetchUserSecurityQuestions(email);
-      setQuestions([
-        { id: 1, question: data.question1 },
-        { id: 2, question: data.question2 },
-      ]);
-      toast.success("Security questions loaded!");
-    } catch (err) {
-      toast.error("Failed to fetch questions. Try again.");
-      setQuestions(null);
-    } finally {
-      setIsLoadingQuestions(false);
-    }
-  };
-  
-  const mutation = useMutation({
-    mutationFn: verifySecurityAnswers,
-    onSuccess: () => {
-      toast.success("Identity verified!");
-      navigate("/resetPassword", { replace: true, state: { verified: true } });
-    },
-    onError: () => {
-      toast.error("Answers are incorrect. Please try again.");
-    },
-  });
-  
-  const handleAnswerChange = (id: number, value: string) => {
-    setAnswers((prev) => ({ ...prev, [id]: value }));
-  };
+        questions.forEach((q) => {
+            const answer = answers[q.id] || "";
+            if (!answer.trim()) {
+                newErrors[q.id] = "Answer is required";
+                isValid = false;
+            } else if (answer.trim().length < 2) {
+                newErrors[q.id] = "Answer must be at least 2 characters";
+                isValid = false;
+            }
+        });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!questions) return;
+        setErrors(newErrors);
+        return isValid;
+    };
 
-    const schema = getSchema(questions);
-    const result = schema.safeParse(
-      Object.fromEntries(Object.entries(answers).map(([k, v]) => [k.toString(), v]))
-    );
+    const handleChange = (id: number, value: string) => {
+        setAnswers((prev) => ({
+            ...prev,
+            [id]: value,
+        }));
 
-    if (!result.success) {
-      const fieldErrors: Record<number, string> = {};
-      for (const key in result.error.flatten().fieldErrors) {
-        const message = result.error.flatten().fieldErrors[key]?.[0];
-        if (message) fieldErrors[parseInt(key)] = message;
-      }
-      setErrors(fieldErrors);
-      return;
-    }
+    };
 
-    setErrors({});
-    mutation.mutate({
-      email,
-      answer1: answers[1] || "",
-      answer2: answers[2] || "",
-    });
-  };
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
 
-  const handleContinue = () => {
-    const isValid = validateEmail(email);
-    if (!isValid) {
-      toast.error("Please enter a valid email");
-      return;
-    }
-    fetchQuestions();
-  };
-  
+        if (!validateAnswers()) {
+            toast.error("Please answer all security questions correctly");
+            return;
+        }
 
-  return (
-    <>
-      <Toaster position="top-right" toastOptions={{ duration: 2000 }} />
-      <div className="max-w-xl mx-auto mt-10 p-6">
-        {!questions ? (
-          <>
-            <h1 className="text-lg text-gray-800 font-medium mb-4">Please enter a valid email to load your security questions.</h1>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded mb-4"
-                placeholder="e.g. user@example.com"
-              />
-              <button
-                onClick={handleContinue}
-                disabled={isLoadingQuestions}
-                className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-              >
-                {"Continue"}
-              </button>
-          </>
-        ) : (
-          <div>
-            <h1 className="text-xl font-semibold text-gray-900 text-center mb-4">Verify your identity by answering these questions</h1>
+        const questionAnswers: SecurityQuestionAnswer[] = questions.map((q) => ({
+            question: q.question,
+            answer: answers[q.id] || "",
+        }));
+        console.log("Data",questionAnswers);
+        
+        //pass the above questionAnswers to apiCall
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {questions.map((q) => (
-                <div key={q.id}>
-                  <label className="block mb-1 text-sm font-medium">{q.question}</label>
-                  <input
-                    type="text"
-                    value={answers[q.id] || ""}
-                    onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                    className={`w-full p-2 border ${errors[q.id] ? "border-red-500" : "border-gray-300"
-                      } rounded`}
-                  />
-                  {errors[q.id] && <p className="text-red-500 text-sm">{errors[q.id]}</p>}
-                </div>
-              ))}
-              <button
-                type="submit"
-                disabled={mutation.isPending}
-                className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-              >
-                {mutation.isPending ? "Verifying..." : "Submit Answers"}
-              </button>
+        setIsLoading(true);
+
+        try {
+            // Simulating API response for demonstration
+            const apiResponse = true; // This would come from the actual API response
+
+            if (apiResponse) {
+                // Show success toast
+                toast.success("Identity verified successfully!", {
+                  duration: 2000 // Longer duration to ensure visibility
+                });
+                
+                // Wait for toast to be visible before navigating
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+                
+                // Then navigate
+                navigate("/resetPassword", { replace: true, state: { verified: true } });
+              } else {
+                toast.error("Security answers verification failed. Please try again.");
+              }
+        } catch (error) {
+            let errorMessage = "Failed to verify security questions";
+            if (axios.isAxiosError(error)) {
+                errorMessage = error.response?.data?.message || errorMessage;
+            }
+            toast.error(errorMessage);
+        } finally {
+            setIsLoading(false);
+        }
+
+    };
+
+    return (
+        <div className="w-full max-w-lg mx-auto m-4 p-6 bg-white rounded-lg">
+            <h2 className="text-2xl font-bold mb-6 text-center">Security Verification</h2>
+            <p className="text-gray-600 mb-6 text-center">
+                Please answer your security questions to verify your identity
+            </p>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+                {questions.map((q) => (
+                    <div key={q.id} className="space-y-2">
+                        <label htmlFor={`q-${q.id}`} className="block text-sm font-medium text-gray-700">
+                            {q.question}
+                        </label>
+
+                        <input
+                            type="text"
+                            id={`q-${q.id}`}
+                            name={`q-${q.id}`}
+                            value={answers[q.id] || ""}
+                            onChange={(e) => handleChange(q.id, e.target.value)}
+                            className={`w-full p-3 border ${errors[q.id] ? "border-red-500" : "border-gray-300"
+                                } rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500`}
+                            placeholder="Your answer"
+                            disabled={isLoading}
+                        />
+                        {errors[q.id] && (
+                            <p className="mt-1 text-sm text-red-500">{errors[q.id]}</p>
+                        )}
+                    </div>
+                ))}
+
+                <button
+                    type="submit"
+                    disabled={isLoading}
+                    className={`w-full py-3 px-4 rounded-md mt-6 text-white font-medium transition ${isLoading
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        }`}
+                >
+                    {isLoading ? (
+                        <span className="flex items-center justify-center">
+                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Verifying...
+                        </span>
+                    ) : (
+                        "Verify Identity"
+                    )}
+                </button>
             </form>
-
-          </div>
-        )}
-      </div>
-    </>
-  );
+        </div>
+    );
 };
 
 export default SecurityQn;

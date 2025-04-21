@@ -7,17 +7,19 @@ function ResetPassword() {
   const location = useLocation();
   const navigate = useNavigate();
   const isUserVerified = location.state?.verified;
-  
+
   useEffect(() => {
     if (!isUserVerified) {
       // Redirect back if not verified
-      navigate("/security-check",{replace:true});
+      navigate("/security-check", { replace: true });
     }
   }, [isUserVerified, navigate]);
 
+  if (!isUserVerified) return null;
+
   return (
     <>
-      <div className="mt-10 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <ResetPasswordForm />
       </div>
       <Toaster position="top-right" toastOptions={{

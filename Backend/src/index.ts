@@ -14,11 +14,10 @@ import otpRoutes from "./routes/otpRouter";
 import categoryRoutes from "./routes/categoryRouter";
 import assets from "./routes/assetsRouter";
 import cors from "cors";
-import userSecurityInfo from "./routes/userSecurityInfoRouter";
 
 const corsOptions = {
   origin: process.env.CORS_ORIGIN, // http://localhost:3000 for development and http://easyassets.vercel.app for production
-  methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 };
 
@@ -44,7 +43,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/otp", otpRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/assets", assets);
-app.use("/api/security-questions",userSecurityInfo );
 
 app.get("/", (req: Request, res: Response) => {
   res.json(console.log(req.path));
