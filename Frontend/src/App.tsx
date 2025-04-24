@@ -11,6 +11,7 @@ import AssetManagement from "./pages/admin/AssetManagement";
 import Sidebar from "./components/Sidebar";
 // import { useAuth } from "./hooks/useAuth";
 import { AuthProvider } from "./context/AuthContext";
+import AskSecurityQn from "./components/auth/AskSecurityQn";
 
 // const LoginSimulator = () => {
 //   const { login, user, logouts } = useAuth();
@@ -40,6 +41,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/ask-security-qn" element={<AskSecurityQn />}/>
           <Route element={<Sidebar />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/issue-tracker" element={<IssueTrackerDashboard />} />

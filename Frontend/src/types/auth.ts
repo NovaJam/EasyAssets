@@ -26,9 +26,11 @@ export type SecurityQuestion = {
   question: string;
 };
 
-export type SecurityQuestionAnswer = {
-  question: string;
-  answer: string;
+export type SecurityQuestionAnswerRequest = {
+  securityQuestion1: string;
+  answer1: string;
+  securityQuestion2: string;
+  answer2: string;
 };
 
 export const resetPasswordSchema = z.object({

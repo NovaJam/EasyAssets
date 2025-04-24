@@ -16,11 +16,11 @@ export const saveUserSecurityInfo = async (req: Request, res: Response) => {
       return;
     }
 
-    const userId = req?.user?.id;
+    const userEmail = parsed?.data?.email;
 
-    console.log("valid UserId? ==>",userId);
+    console.log("valid UserId? ==>",userEmail);
     
-    if (!userId) {
+    if (!userEmail) {
       res.status(401).json({ message: 'Unauthorized: User ID missing from session' });
     }
 
@@ -63,7 +63,7 @@ export const saveUserSecurityInfo = async (req: Request, res: Response) => {
       answer2: hashedAnswer2,
     };
 
-    await saveUserSecurityInfoService(userId, SaveData);
+    await saveUserSecurityInfoService(userEmail, SaveData);
 
     res.status(201).json({ message: "Security questions saved successfully" });
     return;
@@ -132,13 +132,13 @@ export const verifySecurityAnswers = async (req: Request, res: Response) => {
 //Used to delete saved answers while testing
 // export const deleteUserSecurityInfoController = async (req: Request, res: Response) => {
 //   try {
-//     const userId = req?.user?.id;  // Assuming the user ID is attached to the request by middleware
+//     const {email} = req?.body;  // Assuming the user Email is attached to the request body
 
-//     if (!userId) {
-//       res.status(400).json({ message: "User ID is missing" });
+//     if (!email) {
+//       res.status(400).json({ message: "Email is missing" });
 //     }
 
-//     const result = await deleteUserSecurityInfo(userId);
+//     const result = await deleteUserSecurityInfo(email);
 
 //     if (result) {
 //       res.status(200).json({ message: "Security questions deleted successfully" });

@@ -3,6 +3,7 @@ import { SignupData } from "../../types/auth";
 import { signup } from "../../routes/authRoute"; // Assuming this is your signup API function
 import { AxiosError } from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const SignupForm = () => {
   useEffect(() => {
@@ -56,9 +57,17 @@ const SignupForm = () => {
     setError("");
 
     try {
-      await signup(formData);
-      console.log("Signup successful");
-      navigate("/login");
+      const responseData = await signup(formData);
+      let success = responseData?.success;
+      if(responseData){
+        success = responseData?.success;
+        if(success) {
+          navigate("/ask-security-qn",{replace:true, state:{email:formData.email}});
+        }
+      }
+      else{
+        toast.error(responseData?.error,{duration:2000});
+      }
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       const backendMessage =
@@ -182,7 +191,7 @@ const SignupForm = () => {
           type="submit"
           className="w-full bg-purple-500 hover:bg-purple-900 text-white p-2 rounded-md mt-4 transition-all"
         >
-          Sign Up
+          Continue
         </button>
       </form>
     </div>
