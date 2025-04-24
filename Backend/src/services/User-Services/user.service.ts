@@ -1,4 +1,4 @@
-import { User } from "../../models/user/userModel";
+import { User } from "../../models/User/userModel";
 
 export const getUsers = () => User.find();
 //Being used in UserSecurityInfoController
