@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { login } from "../../routes/authRoute";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 
 const LoginForm = () => {
@@ -88,6 +88,10 @@ const LoginForm = () => {
             required
           />
         </div>
+
+        <NavLink to={"/resetPassword"}>
+          <span className="underline-offset-1 underline">Forgot Password?</span>
+        </NavLink>
 
         <button
           type="submit"
