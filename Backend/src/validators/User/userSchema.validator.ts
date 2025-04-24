@@ -2,6 +2,7 @@ import { z } from "zod";
 
 //user selecting and answering security questions during signup
 export const userSecurityInfoZodSchema = z.object({
+    email:z.string().email(),
     securityQuestion1: z.string().min(1, 'First security question is required'),
     answer1: z.string().min(1, 'Answer to first question is required'),
     securityQuestion2: z.string().min(1, 'Second security question is requried'),

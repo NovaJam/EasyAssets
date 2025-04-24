@@ -3,7 +3,6 @@ import { getAllSecurityQuestions, insertDefaultSecurityQuestions } from "../cont
 import { 
     //deleteUserSecurityInfoController, 
     getUserSecurityQuestions, saveUserSecurityInfo, verifySecurityAnswers } from "../controllers/userSecurityInfo.controller";
-import { checkSessionToken } from "../middleware/auth/auth.middleware";
 
 const router = Router();
 
@@ -52,16 +51,16 @@ router.get('/',getAllSecurityQuestions);
  *   post:
  *     summary: Save user's selected security questions and answers
  *     tags: [Security Questions]
- *     security:
- *       - sessionCookie: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             required: [securityQuestion1, answer1, securityQuestion2, answer2]
+ *             required: [email, securityQuestion1, answer1, securityQuestion2, answer2]
  *             properties:
+ *               email:
+ *                 type: string
  *               securityQuestion1:
  *                 type: string
  *               answer1:
@@ -78,7 +77,7 @@ router.get('/',getAllSecurityQuestions);
  *       500:
  *         description: Failed to save security info
  */
-router.post('/save', checkSessionToken, saveUserSecurityInfo);
+router.post('/save', saveUserSecurityInfo);
 
 /**
  * @swagger
@@ -158,8 +157,16 @@ router.post('/verify',verifySecurityAnswers);
 //  *   delete:
 //  *     summary: Delete user's saved security questions
 //  *     description: Deletes the user's security questions from the database.
-//  *     security:
-//  *       - sessionCookie: []
+//  *     requestBody:
+//  *       required: true
+//  *       content:
+//  *         application/json:
+//  *           schema:
+//  *             type: object
+//  *             required: [email]
+//  *             properties:
+//  *               email:
+//  *                 type: string
 //  *     responses:
 //  *       200:
 //  *         description: Security questions deleted successfully
@@ -170,6 +177,6 @@ router.post('/verify',verifySecurityAnswers);
 //  *       500:
 //  *         description: Failed to delete security questions
 //  */
-// router.delete("/delete",checkSessionToken, deleteUserSecurityInfoController);
+// router.delete("/delete", deleteUserSecurityInfoController);
 
 export default router;

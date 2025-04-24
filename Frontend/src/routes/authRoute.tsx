@@ -26,12 +26,12 @@ export const login = async (
 };
 
 // For Signup Route
-export const signup = async (data: SignupData): Promise<void> => {
+export const signup = async (data: SignupData) => {
   try {
-    await axios.post(`${AUTH_URL}/api/auth/signup`, data);
-    console.log("Signup Success");
+    const res = await axios.post(`${AUTH_URL}/api/auth/signup`, data);
+    return res.data;
   } catch (error) {
     console.error("Signup error:", error);
-    throw error;
+    return false;
   }
 };

@@ -4,14 +4,18 @@ import { getUserByEmail } from "./user.service";
 import bcrypt from 'bcrypt';
 
 export const saveUserSecurityInfoService = async (
-    userId: string, 
-    data: { 
-        securityQuestion1: string, 
-        answer1: string, 
-        securityQuestion2: string, 
-        answer2: string 
+    userEmail: string,
+    data: {
+        securityQuestion1: string,
+        answer1: string,
+        securityQuestion2: string,
+        answer2: string
     }) => {
-        await UserSecurityInfo.create({userId, ...data});
+    const user = await getUserByEmail(userEmail);
+
+    if (!user) return null;
+    const userId = user._id;
+    await UserSecurityInfo.create({ userId, ...data });
 }
 
 export const getUserSecurityQuestionsService = async(email:string) => {
@@ -28,7 +32,7 @@ export const verifySecurityAnswersService = async(email:string, answer1:string, 
     if(!user) return null;
 
     const userSecurityInfo = await UserSecurityInfo.findOne({userId:user?._id})
-    .select('+answer1 +answer2');
+        .select('+answer1 +answer2');
 
     if (!userSecurityInfo) return false;
 
@@ -39,8 +43,12 @@ export const verifySecurityAnswersService = async(email:string, answer1:string, 
 }
 
 //Used to delete saved answers while testing
-// export const deleteUserSecurityInfo = async (userId: string) => {
+// export const deleteUserSecurityInfo = async (email: string) => {
 //     try {
+//         const user = await getUserByEmail(email);
+
+//     if (!user) return null;
+//     const userId = user?._id;
 //       // Remove the user's security information from the UserSecurityInfo collection
 //       await UserSecurityInfo.findOneAndDelete({ userId });
 //       return true;
