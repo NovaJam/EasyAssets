@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { login } from "../../routes/authRoute";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 
 const LoginForm = () => {
 
-  useEffect (() => {
+  useEffect(() => {
     document.body.classList.add('errormt');
 
-    return () =>{
+    return () => {
       document.body.classList.remove('errormt');
     }
-  } )
+  })
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -82,10 +82,9 @@ const LoginForm = () => {
           />
         </div>
 
-             Creatw an account?{" "}
-     <Link to  ="/SignUp">
-          <span className="underline underline-offset-1 text-purple-700">Sign Up</span>
-      </Link>
+        <NavLink to={"/resetPassword"}>
+          <span className="underline-offset-1 underline">Forgot Password?</span>
+        </NavLink>
 
         <button
           type="submit"
