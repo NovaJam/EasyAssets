@@ -1,6 +1,7 @@
 import { User } from "../../models/User/userModel";
 
 export const getUsers = () => User.find();
+//Being used in UserSecurityInfoController
 export const getUserByEmail = (email: string) => User.findOne({ email: email });
 export const getUserById = (id: string) => User.findById(id);
 export const createUser = (values: Record<string, any>) =>

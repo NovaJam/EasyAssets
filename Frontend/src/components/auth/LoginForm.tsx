@@ -39,6 +39,7 @@ const LoginForm = () => {
       console.error("Login error:", error);
     }
   };
+
   return (
     <div className="w-full max-w-md mx-auto p-4">
       <h1 className="font-semibold text-4xl text-center text-gray-600">EasyAssets</h1>
@@ -94,6 +95,11 @@ const LoginForm = () => {
         >
           Log In
         </button>
+
+        <a href="/signup">
+          Don't have account?{" "}
+          <span className="underline-offset-1 underline">Signup</span>
+        </a>
       </form>
     </div>
   );
